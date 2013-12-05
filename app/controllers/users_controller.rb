@@ -26,22 +26,22 @@ class UsersController < ApplicationController
     end 
   end
 
-  def edit
-      #exercise 1
-      if current_user.admin?
-        redirect_to @user, notice: "cannot updating admin"
-      else
+  def edit 
         @user = User.find(params[:id])
-      end
+     
   end
-
+#exercise 1
   def update
       @user = User.find(params[:id])
-      if(@user.update_attributes(user_params))
+      if @user.admin?
+        redirect_to @user, notice: "Cannot edit data admin."
+      else
+        if(@user.update_attributes(user_params))
           flash[:success] = 'Profile updated'
           redirect_to @user
-      else
+        else
           render 'edit'
+        end
       end
   end
 
@@ -79,6 +79,8 @@ class UsersController < ApplicationController
         redirect_to signin_url, notice: "Please sign in."
       end
     end
+
+
 
     def correct_user
       @user = User.find(params[:id])
